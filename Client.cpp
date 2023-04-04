@@ -31,8 +31,6 @@ void Query(std::string msg){
     std::vector<char> Buff(bytes);
     sock.read_some(boost::asio::buffer(Buff.data(), Buff.size()), ec);
     
-    //std::cout << "Query: " << msg;
-    //std::cout << std::endl;
     std::cout << "Result:\n";
 
     for(auto c: Buff)
@@ -41,11 +39,4 @@ void Query(std::string msg){
     std::cout << "\n\n";
     
     sock.close();
-}
-
-int main(){ 
-    Query("get list");
-    Query("delete,/home/rus/Desktop/TestTask/covid_worldwide.csv");
-    Query("get list");
-    return 0;
 }

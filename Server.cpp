@@ -40,7 +40,7 @@ void handle_connection(Files& a){
         }
         else
         if(boost::algorithm::contains(msg, "sort")){
-            std::vector<std::string> for_sort = Split(msg, ',');
+            std::vector<std::string> for_sort = Split(msg, '|');
             std::vector<std::string> Categories;
             
             for(int i = 2; i < for_sort.size(); i++)
@@ -51,33 +51,32 @@ void handle_connection(Files& a){
         }
         else
         if(boost::algorithm::contains(msg, "get head")){
-            std::vector<std::string> get_header = Split(msg, ',');
+            std::vector<std::string> get_header = Split(msg, '|');
             msg = a.Get_Header(get_header[1]);
         }
         else
         if(boost::algorithm::contains(msg, "delete")){
-            std::vector<std::string> del = Split(msg, ',');
+            std::vector<std::string> del = Split(msg, '|');
             a.Delete(del[1]);
             msg = "Deleted!";
+        }else
+        if(boost::algorithm::contains(msg, "add")){
+            std::vector<std::string> add = Split(msg, '|');
+            CSV_Table Temporary;
+            Temporary.String_Into_CSV(add[2]);
+            Temporary.FilePath = add[1];
+            a.Add(Temporary);
+            msg = "Table is added!";
+        }else
+        if(boost::algorithm::contains(msg, "show")){
+            std::vector<std::string> show = Split(msg, '|');
+            msg = a.Show(show[1]);
         }
 
         sock.write_some(boost::asio::buffer(msg));        
         sock.close();
     }
 }
-
-int main(){
-    CSV_Table file1("/home/rus/Desktop/TestTask/covid_worldwide.csv");
-    CSV_Table file2("/home/rus/Desktop/TestTask/prc_hpi_a__custom_3617733_page_linear.csv");
-    CSV_Table file3("/home/rus/Desktop/TestTask/test.csv");
-
-    Files Dataset;
-    Dataset.Add(file1);
-    Dataset.Add(file2);
-    Dataset.Add(file3);
-    
-    std::cout << "Server is active! :)\n";
-    handle_connection(Dataset); 
-    
-    return 0;
-}
+    //CSV_Table file1("/home/rus/Desktop/TestTask/covid_worldwide.csv");
+    //CSV_Table file2("/home/rus/Desktop/TestTask/prc_hpi_a__custom_3617733_page_linear.csv");
+    //CSV_Table file3("/home/rus/Desktop/TestTask/test.csv");

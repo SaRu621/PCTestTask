@@ -283,7 +283,7 @@ class Files{
 
         void Delete(std::string Path){ Data.erase(Path); Num_Of_Files--; };
 
-        void Show(std::string Path){ std::cout << Data[Path] << std::endl; };
+        std::string Show(std::string Path){ return Data[Path].CSV_Into_String(); };
 
         void Head(std::string Path){ Data[Path].Head(); };
 
